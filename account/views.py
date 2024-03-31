@@ -3,7 +3,7 @@ from .serializers import *
 from rest_framework.response import Response
 from .models import *
 from rest_framework.generics import GenericAPIView
-from rest_framework import status
+from rest_framework import status, viewsets
 from account.renderers  import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
@@ -154,3 +154,35 @@ class LogoutUserView(GenericAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({'message': 'User logged out successfully'}, status=status.HTTP_204_NO_CONTENT)
+    
+#For Customer
+class CustomerProfileView(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = CustomerProfileSerializer
+    queryset = CustomerProfile.objects.all()
+    
+""" 
+    def get(self, request):
+        serializer = self.serializer_class(data=request.data)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'message': 'Customer Profile Created!'}, status=status.HTTP_200_OK)
+
+    def patch(self, request):
+        user = request.user
+        serializer = self.serializer_class(
+            user, data=request.data, partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data) """
+
+#for Branch
+class BranchView(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = BranchSeralizer
+    queryset = Branch.objects.all()

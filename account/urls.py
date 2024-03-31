@@ -11,6 +11,10 @@ urlpatterns = [
     path('api/', include(router.urls)),
 ] """
 
+router = DefaultRouter()
+router.register(r'customers', CustomerProfileView, basename='customers')
+router.register(r'branches', BranchView, basename='branches')
+
 urlpatterns = [
     path('register/', RegisterUserView.as_view(), name='register'),
     path('verify-email/', VerifyUserEmail.as_view(), name='verify-email'),
@@ -21,3 +25,5 @@ urlpatterns = [
     path('set-new-password/', SetNewPassword.as_view(), name='set-new-password'),
     path('logout/', LogoutUserView.as_view(), name='logout'),
 ]
+
+urlpatterns+=router.urls

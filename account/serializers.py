@@ -155,5 +155,18 @@ class LogoutUserSerializer(serializers.Serializer):
             return self.fail('bad_token')
         
 
+class CustomerProfileSerializer(serializers.ModelSerializer):   
+    class Meta:
+        model = CustomerProfile
+        fields = '__all__'
+
+
+class BranchSeralizer(serializers.ModelSerializer):
+    class Meta:
+        model = Branch
+        fields = '__all__'
+
+    def validate(self, attrs):
+        return super().validate(attrs)
 
         
