@@ -20,7 +20,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MyCustomUser
-        fields = ['email','name', 'password','password2', 'branch']
+        fields = ['email','name', 'password','password2', 'branch','address','pincode','mobile','gender','role','dob']#add all fields here
 
     def validate(self, attrs):
         password = attrs.get('password','')        
@@ -34,9 +34,15 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             password=validated_data['password'],
             name=validated_data['name'],
-            branch=validated_data['branch']
+            branch=validated_data['branch'],
+            address = validated_data['address'],
+            pincode = validated_data['pincode'],
+            mobile = validated_data['mobile'],  
+            gender = validated_data['gender'],
+            role = validated_data['role'],
+            dob = validated_data['dob']
         )
-
+        
         return user
     
 class LoginSerializer(serializers.ModelSerializer):
