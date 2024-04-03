@@ -23,7 +23,7 @@ class MediumSerializer(serializers.ModelSerializer):
     class Meta:
         model = Medium
         #fields = ['medium_name','slug','uuid','id']
-        exclude = ['id','created_at','updated_at']
+        exclude = ['id','created_at','updated_at','updated_by']
 
     # Can write any functionlity
     """ def get_slug(self, obj):
@@ -89,7 +89,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class CitySerializer(serializers.ModelSerializer):    
     class Meta:
         model = City
-        exclude = ['id','created_at','updated_at']
+        fields = "__all__"
 
     def validate_city_name(self, data):
         if data:
@@ -104,7 +104,7 @@ class ProvinceSerializer(serializers.ModelSerializer):
     cities = CitySerializer(many=True, read_only=True)
     class Meta:
         model = Province
-        fields = ['id','uuid','province_name','cities']
+        fields = ['id','province_name','cities']
 
     def validate_province_name(self, data):
         if data:

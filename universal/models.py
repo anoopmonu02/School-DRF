@@ -44,7 +44,7 @@ class Province(models.Model):
         return self.province_name
 
 class City(models.Model):
-    province = models.ForeignKey(Province, related_name="provinces", on_delete=models.CASCADE)
+    province = models.ForeignKey(Province, related_name="cities", on_delete=models.CASCADE)
     city_name = models.CharField(max_length=100)
     city_code = models.CharField(max_length=3, null=True)
 
