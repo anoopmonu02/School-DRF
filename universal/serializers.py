@@ -89,7 +89,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class CitySerializer(serializers.ModelSerializer):    
     class Meta:
         model = City
-        fields = "__all__"
+        fields = ['id','city_name']
 
     def validate_city_name(self, data):
         if data:
