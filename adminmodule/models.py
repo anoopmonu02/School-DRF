@@ -3,7 +3,7 @@ from .utils import *
 from base.models import BaseModel
 from universal.models import Month_Master
 from django.core.validators import MaxValueValidator, MinValueValidator
-from universal.models import Branch
+from account.models import Branch
 # Create your models here.
 
 ACTIVE_STATUS = 1

@@ -42,7 +42,7 @@ class MediumSerializer(serializers.ModelSerializer):
 class BankSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bank
-        exclude = ['id','created_at','updated_at']
+        exclude = ['id','created_at','updated_at','updated_by']
 
     def validate_bank_name(self, data):
         if data:
@@ -58,7 +58,7 @@ class CastSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cast
         #fields = ('uuid', 'category', 'cast_name')
-        exclude = ['id','created_at','updated_at']         
+        exclude = ['id','created_at','updated_at','updated_by']         
     
 
     def validate_cast_name(self, data):
@@ -118,7 +118,7 @@ class ProvinceSerializer(serializers.ModelSerializer):
 class Month_MasterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Month_Master
-        exclude = ['id','created_at','updated_at']
+        exclude = ['id','created_at','updated_at','updated_by']
 
     def validate_month_name(self, data):
         if data:

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'account',
     'base',
     'universal',
+    'adminmodule',
 ]
 
 MIDDLEWARE = [

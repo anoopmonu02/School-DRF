@@ -37,17 +37,17 @@ class CustomDateFormatField(serializers.DateField):
 class GradeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Grade
-        exclude = ['created_at','updated_at']
+        exclude = ['created_at','updated_at','updated_by']
 
 class SectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Section
-        exclude = ['created_at','updated_at']
+        exclude = ['created_at','updated_at','updated_by']
 
 class FeeHeadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feehead
-        exclude = ['created_at','updated_at']
+        exclude = ['created_at','updated_at','updated_by']
 
     def validate_feehead_name(self, data):
         if data:
@@ -61,7 +61,7 @@ class FeeHeadSerializer(serializers.ModelSerializer):
 class DiscountheadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Discounthead
-        exclude = ['created_at','updated_at']
+        exclude = ['created_at','updated_at','updated_by']
 
     def validate_discount_name(self, data):
         if data:
