@@ -78,7 +78,7 @@ class Finehead(BaseModel):
     def __str__(self) -> str:
         return self.fine_name
     
-
+# TODO-Save later
 class Fine(BaseModel):
     MONTHLY = 1
     QUATERLY = 2

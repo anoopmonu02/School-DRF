@@ -143,6 +143,8 @@ class Branch(models.Model):
     status = models.SmallIntegerField(choices=STATUS_CHOICES, default=STATUS_ACTIVE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    logo1 = models.ImageField(_("Logo"), upload_to='branch_logos/', null=True, blank=True)
+    logo2 = models.ImageField(_("Logo"), upload_to='branch_logos/', null=True, blank=True)
 
     class Meta:
         unique_together = ['customer', 'branch_name']

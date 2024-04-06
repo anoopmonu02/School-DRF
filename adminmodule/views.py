@@ -49,14 +49,27 @@ class DiscountHeadViewSet(viewsets.ModelViewSet):
         serializer.save(updated_by=self.request.user)
 
 class FineheadViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     serializer_class = FineheadSerializer
     queryset = Finehead.objects.all()
+    def perform_create(self, serializer):
+        serializer.save(updated_by=self.request.user)
+
+    def perform_update(self, serializer):
+        serializer.save(updated_by=self.request.user)
 
 
 class AcademicyearViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     serializer_class = AcademicyearSerializer
     queryset = Academicyear.objects.all()
+    def perform_create(self, serializer):
+        serializer.save(updated_by=self.request.user)
+
+    def perform_update(self, serializer):
+        serializer.save(updated_by=self.request.user)
 
 class FineViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     serializer_class = FineSerializer
     queryset = Fine.objects.all()

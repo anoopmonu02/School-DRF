@@ -75,7 +75,7 @@ class DiscountheadSerializer(serializers.ModelSerializer):
 class FineheadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Finehead
-        exclude = ['created_at','updated_at']
+        exclude = ['created_at','updated_at','updated_by']
 
     def validate_fine_name(self, data):
         if data:
@@ -95,7 +95,7 @@ class AcademicyearSerializer(serializers.ModelSerializer):
     # Using default format - YYYY-MM-DD
     class Meta:
         model = Academicyear
-        exclude = ['created_at','updated_at']
+        exclude = ['created_at','updated_at','updated_by']
         read_only_fields = ['slug']
 
     def validate(self, data):
