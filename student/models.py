@@ -75,7 +75,7 @@ class RegisterStudent(BaseModel):
     bodytype = models.CharField(max_length=50, choices=choicesOfBodyType, default='Normal')
 
     #Contact Info
-    address_communication = models.TextField(blank=True, null=True)
+    #address_communication = models.TextField(blank=True, null=True)
     address_permanent = models.TextField(blank=True, null=True)
     landmark = models.CharField(max_length=255, blank=True, null=True)
     province = models.ForeignKey(Province, on_delete=models.RESTRICT, related_name='provinces')
@@ -131,5 +131,7 @@ class BankAndAadhar(BaseModel):
     ifsc_code = models.CharField(max_length=255, blank=True, null=True)
     aadhar_front = models.ImageField(upload_to='student_aadhar_front/', blank=True, null=True)
     aadhar_back = models.ImageField(upload_to='student_aadhar_back/', blank=True, null=True)
+
+
 
 

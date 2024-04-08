@@ -106,4 +106,12 @@ class Fine(BaseModel):
 
     def get_fine_value(self):
         return self.fine_amount
-    
+
+class FeeDate(BaseModel):
+    pass
+
+class FeeMonthMap(BaseModel):
+    pass
+
+class FeeClassMap(BaseModel):
+    pass
