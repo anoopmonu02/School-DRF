@@ -10,7 +10,7 @@ choicesOfGender = (
     ('Male', 'Male'),
     ('Female', 'Female'),
     ('Others', 'Others'),
-    ('No Prefrence', 'No Prefrence')
+    ('No Preference', 'No Preference')
 )
 
 choicesOfReligion = (
@@ -21,7 +21,7 @@ choicesOfReligion = (
     ('Jain', 'Jain'),
     ('Buddhist', 'Buddhist'),
     ('Other', 'Other'),
-    ('No Prefrence', 'No Prefrence')
+    ('No Preference', 'No Preference')
 )
 
 choicesOfBloodGroup = (
@@ -32,6 +32,7 @@ choicesOfBloodGroup = (
     ('AB+', 'AB+'),
     ('AB-', 'AB-'),
     ('O+', 'O+'),
+    ('O-', 'O-'),
     ('None','None')    
 )
 
@@ -47,6 +48,61 @@ ChoicesOfStatus = (
     (2, 'In-Active')
 )
 
+choicesOfRelationship = (
+    ('No Preference', 'No Preference'),
+    ('Husband', 'Husband'),
+    ('Wife', 'Wife'),
+    ('Father', 'Father'),
+    ('Mother', 'Mother'),
+    ('Son', 'Son'),
+    ('Daughter', 'Daughter'),
+    ('Brother', 'Brother'),
+    ('Sister', 'Sister'),
+    ('Grandfather', 'Grandfather'),
+    ('Grandmother', 'Grandmother'),
+    ('Grandson', 'Grandson'),
+    ('Granddaughter', 'Granddaughter'),
+    ('Uncle', 'Uncle'),
+    ('Aunt', 'Aunt'),
+    ('Nephew', 'Nephew'),
+    ('Niece', 'Niece'),
+    ('Cousin', 'Cousin'),
+    ('Father-in-law', 'Father-in-law'),
+    ('Mother-in-law', 'Mother-in-law'),
+    ('Son-in-law', 'Son-in-law'),
+    ('Daughter-in-law', 'Daughter-in-law'),
+    ('Brother-in-law', 'Brother-in-law'),
+    ('Sister-in-law', 'Sister-in-law'),
+    ('Stepfather', 'Stepfather'),
+    ('Stepmother', 'Stepmother'),
+    ('Stepson', 'Stepson'),
+    ('Stepdaughter', 'Stepdaughter'),
+    ('Stepbrother', 'Stepbrother'),
+    ('Stepsister', 'Stepsister'),
+    ('Foster father', 'Foster father'),
+    ('Foster mother', 'Foster mother'),
+    ('Foster son', 'Foster son'),
+    ('Foster daughter', 'Foster daughter'),
+    ('Guardian', 'Guardian'),
+    ('Legal guardian', 'Legal guardian'),
+    ('Adoptive father', 'Adoptive father'),
+    ('Adoptive mother', 'Adoptive mother'),
+    ('Adopted son', 'Adopted son'),
+    ('Adopted daughter', 'Adopted daughter'),
+    ('Foster brother', 'Foster brother'),
+    ('Foster sister', 'Foster sister'),
+    ('Foster uncle', 'Foster uncle'),
+    ('Foster aunt', 'Foster aunt'),
+    ('Foster nephew', 'Foster nephew'),
+    ('Foster niece', 'Foster niece'),
+    ('Godfather', 'Godfather'),
+    ('Godmother', 'Godmother'),
+    ('Godson', 'Godson'),
+    ('Goddaughter', 'Goddaughter'),
+    ('Foster parent', 'Foster parent'),
+    ('Foster child', 'Foster child')
+)
+
 
 #Student Details
 class RegisterStudent(BaseModel):
@@ -54,18 +110,18 @@ class RegisterStudent(BaseModel):
     name = models.CharField(max_length=255)
     father_name = models.CharField(max_length=255)
     mother_name = models.CharField(max_length=255)
-    gender = models.CharField(max_length=10, choices=choicesOfGender, default='No Prefrence')
+    gender = models.CharField(max_length=50, choices=choicesOfGender, default='No Preference')
     dob = models.DateField(null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.RESTRICT, related_name='categories')
     cast = models.ForeignKey(Cast, on_delete=models.RESTRICT, related_name='casts')
     nationality = models.CharField(max_length=50, default='Indian')
     registration_date = models.DateField(auto_now_add=True)
     registration_no = models.CharField(max_length=50, unique=True)
-    religion = models.CharField(max_length=50, choices=choicesOfReligion, default='No Prefrence')
+    religion = models.CharField(max_length=50, choices=choicesOfReligion, default='No Preference')
     father_occupation = models.CharField(max_length=255, blank=True, null=True)    
     mother_occupation = models.CharField(max_length=255, blank=True, null=True)
     student_pic = models.ImageField(upload_to='student_pic/', blank=True, null=True)
-    status = models.IntegerField(default=1, choices=ChoicesOfStatus, default=1)
+    status = models.IntegerField(default=1, choices=ChoicesOfStatus)
     comments = models.TextField(blank=True, null=True)
 
     #physical
@@ -96,25 +152,25 @@ class RegisterStudent(BaseModel):
     #Guardian Details
     guardian_name = models.CharField(max_length=255, blank=True, null=True)
     relationship = models.CharField(max_length=255, blank=True, null=True)
-    guardian_contact = models.CharField(max_length=50, blank=True, null=True)
+    guardian_contact = models.CharField(max_length=100, default='No Preference', choices=choicesOfRelationship)
 
     #Current Class
-    grade = models.ForeignKey(Grade, on_delete=models.RESTRICT, related_name='grades')
-    section = models.ForeignKey(Section, on_delete=models.RESTRICT, related_name='sections')
-    branch = models.ForeignKey(Branch, on_delete=models.RESTRICT, related_name='branches')
-    medium = models.ForeignKey(Medium, on_delete=models.RESTRICT, related_name='mediums')
+    grade = models.ForeignKey(Grade, on_delete=models.RESTRICT, related_name='studentgrades')
+    section = models.ForeignKey(Section, on_delete=models.RESTRICT, related_name='studentsections')
+    branch = models.ForeignKey(Branch, on_delete=models.RESTRICT, related_name='studentbranches')
+    medium = models.ForeignKey(Medium, on_delete=models.RESTRICT, related_name='studentmediums')
     status_school = models.CharField(max_length=20, default='Own', choices=(('Own', 'Own'), ('Grant', 'Grant'), ('Other', 'Other')))
 
 
 #Academic Student Details
 class AcademicStudent(BaseModel):
-    student = models.ForeignKey(RegisterStudent, on_delete=models.RESTRICT, related_name='students')
+    student = models.ForeignKey(RegisterStudent, on_delete=models.RESTRICT, related_name='academicstudents')
     #Academic Details
     migration_date = models.DateField(auto_now_add=True)
     classsrno = models.CharField(max_length=255, blank=True, null=True)
     boardsrno = models.CharField(max_length=255, blank=True, null=True)
-    grade = models.ForeignKey(Grade, on_delete=models.RESTRICT, related_name='grades')
-    section = models.ForeignKey(Section, on_delete=models.RESTRICT, related_name='sections')
+    grade = models.ForeignKey(Grade, on_delete=models.RESTRICT, related_name='academicstudentgrades')
+    section = models.ForeignKey(Section, on_delete=models.RESTRICT, related_name='academicstudentsections')
     branch = models.ForeignKey(Branch, on_delete=models.RESTRICT, related_name='branches')
     academic_year = models.ForeignKey(Academicyear, on_delete=models.RESTRICT, related_name='academic_years')
     roll_no = models.CharField(max_length=50, blank=True, null=True)
@@ -122,7 +178,7 @@ class AcademicStudent(BaseModel):
     comments = models.TextField(blank=True, null=True)
 
 class BankAndAadhar(BaseModel):
-    student = models.ForeignKey(RegisterStudent, on_delete=models.RESTRICT, related_name='students')
+    student = models.ForeignKey(RegisterStudent, on_delete=models.RESTRICT, related_name='bankstudents')
     #Bank & Aadhar details
     bank = models.ForeignKey(Bank, on_delete=models.RESTRICT, related_name='banks')
     account_no = models.CharField(max_length=255, blank=True, null=True)

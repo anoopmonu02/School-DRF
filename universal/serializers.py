@@ -23,7 +23,7 @@ class MediumSerializer(serializers.ModelSerializer):
     class Meta:
         model = Medium
         #fields = ['medium_name','slug','uuid','id']
-        exclude = ['id','created_at','updated_at','updated_by']
+        exclude = ['created_at','updated_at','updated_by']
 
     # Can write any functionlity
     """ def get_slug(self, obj):
@@ -42,7 +42,7 @@ class MediumSerializer(serializers.ModelSerializer):
 class BankSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bank
-        exclude = ['id','created_at','updated_at','updated_by']
+        exclude = ['created_at','updated_at','updated_by']
 
     def validate_bank_name(self, data):
         if data:
@@ -53,12 +53,27 @@ class BankSerializer(serializers.ModelSerializer):
 
         return data
 
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id','uuid','category_name']
+        #exclude = ['id','created_at','updated_at']
+    
+    def validate_category_name(self, data):
+        if data:
+            category_name = data
+            checkSpecialCharsInString(category_name, 'Category name')
+            checkValidLenthofField(category_name, 2, 'Category name')
+            checkAnyNumberInString(category_name, 'Category name')
+            
+        return data
 # Cast Serializer with Parent  - Category Serializer
 class CastSerializer(serializers.ModelSerializer):
+    category = CategorySerializer(read_only=True)   
     class Meta:
         model = Cast
-        #fields = ('uuid', 'category', 'cast_name')
-        exclude = ['id','created_at','updated_at','updated_by']         
+        fields = ['id', 'uuid', 'category', 'cast_name']
+        #exclude = ['created_at','updated_at','updated_by']         
     
 
     def validate_cast_name(self, data):
@@ -70,21 +85,7 @@ class CastSerializer(serializers.ModelSerializer):
             
         return data
 
-class CategorySerializer(serializers.ModelSerializer):
-    casts = CastSerializer(many=True, read_only=True)
-    class Meta:
-        model = Category
-        fields = ['id','uuid','category_name','casts']
-        #exclude = ['id','created_at','updated_at']
-    
-    def validate_category_name(self, data):
-        if data:
-            category_name = data
-            checkSpecialCharsInString(category_name, 'Category name')
-            checkValidLenthofField(category_name, 2, 'Category name')
-            checkAnyNumberInString(category_name, 'Category name')
-            
-        return data
+
 
 class CitySerializer(serializers.ModelSerializer):    
     class Meta:

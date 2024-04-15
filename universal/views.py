@@ -42,7 +42,12 @@ class CastView(viewsets.ModelViewSet):
     serializer_class = CastSerializer
     queryset = Cast.objects.all()
     def perform_create(self, serializer):
-        serializer.save(updated_by=self.request.user)
+        category = self.request.data.get('category')
+        if category is not None:
+            category = Category.objects.get(id=category)
+            serializer.save(updated_by=self.request.user, category=category)
+        else:
+            serializer.save(updated_by=self.request.user)
 
     def perform_update(self, serializer):
         serializer.save(updated_by=self.request.user)
