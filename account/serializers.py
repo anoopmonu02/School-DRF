@@ -51,10 +51,11 @@ class LoginSerializer(serializers.ModelSerializer):
     name = serializers.CharField(max_length=255, read_only=True)
     access_token = serializers.CharField(max_length=255, read_only=True)
     refresh_token = serializers.CharField(max_length=255, read_only=True)
+    branch = serializers.IntegerField()
 
     class Meta:
         model=MyCustomUser
-        fields=['email','password','name','access_token','refresh_token']
+        fields=['email','password','name','branch','access_token','refresh_token']
 
     def get_tokens(self, user):
         refresh = RefreshToken.for_user(user)
@@ -66,16 +67,22 @@ class LoginSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         email = attrs.get('email','')
         password = attrs.get('password','')
+        branch = attrs.get('branch','')
         request = self.context['request']
-        user=authenticate(request, username=email, password=password)
+        user=authenticate(request, username=email, password=password, branch=branch)
         if not user:
             raise AuthenticationFailed('Invalid credentials, try again')
         if not user.is_active:
             raise AuthenticationFailed('Account disabled, contact admin')
+        print(user.branch.id)
+        if not user.branch.id==branch:
+            raise AuthenticationFailed('User not associated with Branch, Please select a valid user-branch combination')
         token = self.get_tokens(user)
         return {
             "email": user.email,
             "name": user.get_full_name,
+            "branch": user.branch.id,
+            "branch_name":user.branch,
             "access_token": str(token.get('access_token')),
             "refresh_token": str(token.get('refresh_token'))
         }

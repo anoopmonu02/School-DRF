@@ -105,6 +105,7 @@ class VerifyUserEmail(GenericAPIView):
 class LoginUserView(GenericAPIView):
     serializer_class = LoginSerializer
     def post(self, request):
+        print(request.data)
         serializers = self.serializer_class(data=request.data, context={'request': request})
         serializers.is_valid(raise_exception=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
@@ -157,7 +158,6 @@ class LogoutUserView(GenericAPIView):
     
 #For Customer
 class CustomerProfileView(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
     serializer_class = CustomerProfileSerializer
     queryset = CustomerProfile.objects.all()
     
@@ -183,6 +183,5 @@ class CustomerProfileView(viewsets.ModelViewSet):
 
 #for Branch
 class BranchView(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
     serializer_class = BranchSeralizer
     queryset = Branch.objects.all()
