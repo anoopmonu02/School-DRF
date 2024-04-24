@@ -52,10 +52,11 @@ class LoginSerializer(serializers.ModelSerializer):
     access_token = serializers.CharField(max_length=255, read_only=True)
     refresh_token = serializers.CharField(max_length=255, read_only=True)
     branch = serializers.IntegerField()
+    branch_name = serializers.CharField(max_length=255, read_only=True)
 
     class Meta:
         model=MyCustomUser
-        fields=['email','password','name','branch','access_token','refresh_token']
+        fields=['email','password','name','branch','branch_name','access_token','refresh_token']
 
     def get_tokens(self, user):
         refresh = RefreshToken.for_user(user)
@@ -82,7 +83,7 @@ class LoginSerializer(serializers.ModelSerializer):
             "email": user.email,
             "name": user.get_full_name,
             "branch": user.branch.id,
-            "branch_name":user.branch,
+            "branch_name":user.branch.branch_name,
             "access_token": str(token.get('access_token')),
             "refresh_token": str(token.get('refresh_token'))
         }
