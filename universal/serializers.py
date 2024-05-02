@@ -85,6 +85,10 @@ class CastSerializer(serializers.ModelSerializer):
             
         return data
 
+class CastCategorySerializer(serializers.Serializer):
+    class Meta:
+        model = Cast
+        fields = '__all__'
 
 
 class CitySerializer(serializers.ModelSerializer):    

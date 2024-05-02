@@ -151,8 +151,8 @@ class RegisterStudent(BaseModel):
 
     #Guardian Details
     guardian_name = models.CharField(max_length=255, blank=True, null=True)
-    relationship = models.CharField(max_length=255, blank=True, null=True)
-    guardian_contact = models.CharField(max_length=100, default='No Preference', choices=choicesOfRelationship)
+    relationship = models.CharField(max_length=100, default='No Preference', choices=choicesOfRelationship)
+    guardian_contact = models.CharField(max_length=255, blank=True, null=True)
 
     #Current Class
     grade = models.ForeignKey(Grade, on_delete=models.RESTRICT, related_name='studentgrades')

@@ -18,6 +18,18 @@ class GradeViewSet(viewsets.ModelViewSet):
     def perform_update(self, serializer):
         serializer.save(updated_by=self.request.user)
 
+    @action(detail=False, url_path='branch/(?P<branch_id>\d+)')
+    def branch_grades(self, request, branch_id=None):
+        if branch_id is None:
+            return Response({"error": "Branch is required in the payload."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not branch_id.isdigit():
+            return Response({"error": "Branch ID must be valid"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        queryset = Grade.objects.filter(branch=branch_id)
+        serializer = GradeSerializer(queryset, many=True)
+        return Response(serializer.data)
+
 class SectionViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = SectionSerializer
@@ -27,6 +39,18 @@ class SectionViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         serializer.save(updated_by=self.request.user)
+
+    @action(detail=False, url_path='branch/(?P<branch_id>\d+)')
+    def branch_sections(self, request, branch_id=None):
+        if branch_id is None:
+            return Response({"error": "Branch is required in the payload."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not branch_id.isdigit():
+            return Response({"error": "Branch ID must be valid"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        queryset = Section.objects.filter(branch=branch_id)
+        serializer = SectionSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 class FeeHeadViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
