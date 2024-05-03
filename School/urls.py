@@ -22,5 +22,5 @@ urlpatterns = [
     path('api/v1/auth/', include('account.urls')),
     path('api/v1/universal/', include('universal.urls')),
     path('api/v1/admin/', include('adminmodule.urls')),
-    #path('api/v1/student/', include('adminmodule.urls')),
+    path('api/v1/students/', include('student.urls')),
 ]

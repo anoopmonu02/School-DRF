@@ -10,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 class StudentRegistrationView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
+        print("Request Data: ",request.data)
         serializer = StudentRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(user=request.user)

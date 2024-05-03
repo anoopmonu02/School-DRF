@@ -43,8 +43,8 @@ class AcademicStudentSerializer(serializers.ModelSerializer):
         exclude = ['created_at','updated_at','updated_by']
 
 class StudentRegistrationSerializer(serializers.ModelSerializer):
-    bankAndAadhar = BankAndAadharSerializer(many=True,read_only=True)
-    academicStudent = AcademicStudentSerializer(many=True,read_only=True)
+    bankAndAadhar = BankAndAadharSerializer(many=False)
+    academicStudent = AcademicStudentSerializer(many=True)
 
     class Meta:
         model = RegisterStudent

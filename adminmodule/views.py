@@ -93,6 +93,24 @@ class AcademicyearViewSet(viewsets.ModelViewSet):
     def perform_update(self, serializer):
         serializer.save(updated_by=self.request.user)
 
+    @action(detail=False, url_path='csession/(?P<branch_id>\d+)')
+    def branch_currtent_session(self, request, branch_id=None):
+        if branch_id is None:
+            return Response({"error": "Branch is required in the payload."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not branch_id.isdigit():
+            return Response({"error": "Branch ID must be valid"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            academicyear = Academicyear.objects.filter(branch=branch_id).first()
+            if academicyear:
+                serializer = AcademicyearSerializer(academicyear)
+                return Response(serializer.data)
+            else:
+                return Response({"error": "Academic year not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     
 
 class FineViewSet(viewsets.ModelViewSet):
