@@ -161,6 +161,9 @@ class RegisterStudent(BaseModel):
     medium = models.ForeignKey(Medium, on_delete=models.RESTRICT, related_name='studentmediums')
     status_school = models.CharField(max_length=20, default='Own', choices=(('Own', 'Own'), ('Grant', 'Grant'), ('Other', 'Other')))
 
+    def __str__(self) -> str:
+        return self.name
+
 
 #Academic Student Details
 class AcademicStudent(BaseModel):
@@ -173,6 +176,7 @@ class AcademicStudent(BaseModel):
     section = models.ForeignKey(Section, on_delete=models.RESTRICT, related_name='academicstudentsections')
     branch = models.ForeignKey(Branch, on_delete=models.RESTRICT, related_name='branches')
     academic_year = models.ForeignKey(Academicyear, on_delete=models.RESTRICT, related_name='academic_years')
+    medium = models.ForeignKey(Medium, on_delete=models.RESTRICT, related_name='academicstudentmediums', default=None)
     roll_no = models.CharField(max_length=50, blank=True, null=True)
     status = models.IntegerField(default=1, choices=ChoicesOfStatus)
     comments = models.TextField(blank=True, null=True)
