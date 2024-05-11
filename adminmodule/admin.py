@@ -9,3 +9,5 @@ admin.site.register(Discounthead)
 admin.site.register(Academicyear)
 admin.site.register(Finehead)
 admin.site.register(Fine)
+
+admin.site.register(MonthMapping)

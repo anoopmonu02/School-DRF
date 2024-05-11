@@ -14,6 +14,53 @@ STATUS_CHOICES = (
     (STATUS_DISABLED, 'Disabled')
 )
 
+class CustomerProfile(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    name = models.CharField(_("Customer Name"), max_length=255, unique = True)
+    mobile = models.CharField(_("Mobile"), max_length=15)
+    address = models.TextField(_("Address"), null=True, blank=True)
+    pincode = models.CharField(_("Pincode"), max_length=6, null=True, blank=True)
+    pic = models.ImageField(_("Profile Picture"), upload_to='customer_pics/', null=True, blank=True)
+    logo = models.ImageField(_("Logo"), upload_to='customer_logos/', null=True, blank=True)
+    mobile1 = models.CharField(_("Alternate Mobile"), max_length=15, null=True, blank=True)
+    email = models.EmailField(_("Email"))
+    website = models.CharField(_("Website"), max_length=100, null=True, blank=True)
+    contact_person = models.CharField(_("Contact Person"), max_length=255)
+    conatct_person_mobile = models.CharField(_("Contact Person Mobile"), max_length=15, null=True, blank=True)  
+    description = models.TextField(_("Description"), null=True, blank=True)
+    status = models.SmallIntegerField(choices=STATUS_CHOICES, default=STATUS_ACTIVE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+    def __str__(self) -> str:
+        return self.name
+    
+class Branch(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    customer = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE, related_name='branches')
+    branch_name = models.CharField(max_length=255)
+    branch_code = models.CharField(max_length=50)
+    address = models.TextField()
+    pincode = models.CharField(max_length=6)
+    email = models.EmailField()
+    mobile = models.CharField(max_length=15)
+    mobile1 = models.CharField(_("Alternate Mobile"), max_length=15, null=True, blank=True) 
+    contact_person = models.CharField(_("Contact Person"), max_length=255)
+    contact_person_mobile = models.CharField(_("Contact Person Mobile"), max_length=15, null=True, blank=True)
+    description = models.TextField(_("Description"), null=True, blank=True)
+    status = models.SmallIntegerField(choices=STATUS_CHOICES, default=STATUS_ACTIVE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    logo1 = models.ImageField(_("Logo"), upload_to='branch_logos/', null=True, blank=True)
+    logo2 = models.ImageField(_("Logo"), upload_to='branch_logos/', null=True, blank=True)
+
+    class Meta:
+        unique_together = ['customer', 'branch_name']
+
+    def __str__(self) -> str:
+        return self.branch_name
+
 class MyCustomUserManager(BaseUserManager):
 
     def validate_email(self, email):
@@ -91,7 +138,7 @@ class MyCustomUser(AbstractBaseUser, PermissionsMixin):
     branch = models.ForeignKey('Branch', on_delete=models.SET_NULL, null=True, blank=True, default=None)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['password']
 
     objects = MyCustomUserManager()
 
@@ -105,50 +152,5 @@ class MyCustomUser(AbstractBaseUser, PermissionsMixin):
         return self.name or self.email.split("@")[0]
 
 
-class CustomerProfile(models.Model):
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
-    name = models.CharField(_("Customer Name"), max_length=255, unique = True)
-    mobile = models.CharField(_("Mobile"), max_length=15)
-    address = models.TextField(_("Address"), null=True, blank=True)
-    pincode = models.CharField(_("Pincode"), max_length=6, null=True, blank=True)
-    pic = models.ImageField(_("Profile Picture"), upload_to='customer_pics/', null=True, blank=True)
-    logo = models.ImageField(_("Logo"), upload_to='customer_logos/', null=True, blank=True)
-    mobile1 = models.CharField(_("Alternate Mobile"), max_length=15, null=True, blank=True)
-    email = models.EmailField(_("Email"))
-    website = models.CharField(_("Website"), max_length=100, null=True, blank=True)
-    contact_person = models.CharField(_("Contact Person"), max_length=255)
-    conatct_person_mobile = models.CharField(_("Contact Person Mobile"), max_length=15, null=True, blank=True)  
-    description = models.TextField(_("Description"), null=True, blank=True)
-    status = models.SmallIntegerField(choices=STATUS_CHOICES, default=STATUS_ACTIVE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
-
-    def __str__(self) -> str:
-        return self.name
-    
-class Branch(models.Model):
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
-    customer = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE, related_name='branches')
-    branch_name = models.CharField(max_length=255)
-    branch_code = models.CharField(max_length=50)
-    address = models.TextField()
-    pincode = models.CharField(max_length=6)
-    email = models.EmailField()
-    mobile = models.CharField(max_length=15)
-    mobile1 = models.CharField(_("Alternate Mobile"), max_length=15, null=True, blank=True) 
-    contact_person = models.CharField(_("Contact Person"), max_length=255)
-    contact_person_mobile = models.CharField(_("Contact Person Mobile"), max_length=15, null=True, blank=True)
-    description = models.TextField(_("Description"), null=True, blank=True)
-    status = models.SmallIntegerField(choices=STATUS_CHOICES, default=STATUS_ACTIVE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    logo1 = models.ImageField(_("Logo"), upload_to='branch_logos/', null=True, blank=True)
-    logo2 = models.ImageField(_("Logo"), upload_to='branch_logos/', null=True, blank=True)
-
-    class Meta:
-        unique_together = ['customer', 'branch_name']
-
-    def __str__(self) -> str:
-        return self.branch_name
 

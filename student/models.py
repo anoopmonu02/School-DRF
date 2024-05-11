@@ -4,6 +4,7 @@ from universal.models import *
 from adminmodule.models import *
 from account.models import *
 from django.core.validators import MinValueValidator, MaxValueValidator
+import uuid
 
 
 choicesOfGender = (
@@ -105,7 +106,7 @@ choicesOfRelationship = (
 
 
 #Student Details
-class RegisterStudent(BaseModel):
+class RegisterStudent(models.Model):
     #Personal Info  
     name = models.CharField(max_length=255)
     father_name = models.CharField(max_length=255)
@@ -155,18 +156,23 @@ class RegisterStudent(BaseModel):
     guardian_contact = models.CharField(max_length=255, blank=True, null=True)
 
     #Current Class
-    grade = models.ForeignKey(Grade, on_delete=models.RESTRICT, related_name='studentgrades')
+    """ grade = models.ForeignKey(Grade, on_delete=models.RESTRICT, related_name='studentgrades')
     section = models.ForeignKey(Section, on_delete=models.RESTRICT, related_name='studentsections')
     branch = models.ForeignKey(Branch, on_delete=models.RESTRICT, related_name='studentbranches')
-    medium = models.ForeignKey(Medium, on_delete=models.RESTRICT, related_name='studentmediums')
+    medium = models.ForeignKey(Medium, on_delete=models.RESTRICT, related_name='studentmediums') """
     status_school = models.CharField(max_length=20, default='Own', choices=(('Own', 'Own'), ('Grant', 'Grant'), ('Other', 'Other')))
+
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    updated_by = models.ForeignKey(MyCustomUser, on_delete=models.RESTRICT)
 
     def __str__(self) -> str:
         return self.name
 
 
 #Academic Student Details
-class AcademicStudent(BaseModel):
+class AcademicStudent(models.Model):
     student = models.ForeignKey(RegisterStudent, on_delete=models.RESTRICT, related_name='academicstudents')
     #Academic Details
     migration_date = models.DateField(auto_now_add=True)
@@ -180,8 +186,12 @@ class AcademicStudent(BaseModel):
     roll_no = models.CharField(max_length=50, blank=True, null=True)
     status = models.IntegerField(default=1, choices=ChoicesOfStatus)
     comments = models.TextField(blank=True, null=True)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    updated_by = models.ForeignKey(MyCustomUser, on_delete=models.RESTRICT)
 
-class BankAndAadhar(BaseModel):
+class BankAndAadhar(models.Model):
     student = models.ForeignKey(RegisterStudent, on_delete=models.RESTRICT, related_name='bankstudents')
     #Bank & Aadhar details
     bank = models.ForeignKey(Bank, on_delete=models.RESTRICT, related_name='banks')
@@ -191,6 +201,10 @@ class BankAndAadhar(BaseModel):
     ifsc_code = models.CharField(max_length=255, blank=True, null=True)
     aadhar_front = models.ImageField(upload_to='student_aadhar_front/', blank=True, null=True)
     aadhar_back = models.ImageField(upload_to='student_aadhar_back/', blank=True, null=True)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    updated_by = models.ForeignKey(MyCustomUser, on_delete=models.RESTRICT)
 
 
 

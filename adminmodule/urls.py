@@ -12,5 +12,8 @@ router.register('finehead',FineheadViewSet, basename='finehead')
 router.register('academicyear',AcademicyearViewSet, basename='academicyear')
 router.register('fine',FineViewSet, basename='fine')
 
-
-urlpatterns = router.urls
+urlpatterns = [
+    path('month-mapping/', MonthMappingView.as_view(), name='month-mapping'),
+    path('fee-class-mapping/', FeeClassMappingView.as_view(), name='fee-class-mapping'),
+]
+urlpatterns += router.urls

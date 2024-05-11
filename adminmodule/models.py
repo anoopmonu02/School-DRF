@@ -4,6 +4,7 @@ from base.models import BaseModel
 from universal.models import Month_Master
 from django.core.validators import MaxValueValidator, MinValueValidator
 from account.models import Branch
+import uuid
 # Create your models here.
 
 ACTIVE_STATUS = 1
@@ -107,6 +108,17 @@ class Fine(BaseModel):
     def get_fine_value(self):
         return self.fine_amount
 
+class MonthMapping(BaseModel):    
+    #saving month mapping to academic year and branch with ordering
+    monthName = models.CharField(max_length=50)
+    monthCode = models.CharField(max_length=10)
+    academicYear = models.ForeignKey(Academicyear, related_name="monthmap_session", on_delete=models.RESTRICT)
+    branch = models.ForeignKey(Branch, related_name="monthmap_branch", on_delete=models.RESTRICT)
+    priority = models.PositiveIntegerField(default=1)
+
+    class Meta:
+        unique_together = ['academicYear', 'branch','monthName']
+
 class FeeDate(BaseModel):
     pass
 
@@ -114,4 +126,16 @@ class FeeMonthMap(BaseModel):
     pass
 
 class FeeClassMap(BaseModel):
-    pass
+    grade = models.ForeignKey(Grade, on_delete=models.RESTRICT, related_name='fee_class_map_grades', null=True)    
+    academicYear = models.ForeignKey(Academicyear, related_name="fee_class_map_session", on_delete=models.RESTRICT, null=True)
+    branch = models.ForeignKey(Branch, related_name="fee_class_map_branch", on_delete=models.RESTRICT, null=True)
+
+    class Meta:
+        unique_together = ['grade', 'academicYear', 'branch']
+
+class FeeClassAmountMap(BaseModel):
+    feehead = models.ForeignKey(Feehead, on_delete=models.RESTRICT, related_name='fee_class_map_heads')
+    feeClassMap = models.ForeignKey(FeeClassMap, on_delete=models.CASCADE, related_name='fee_class_amount_map_fee_class')
+    amount = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
+
+
