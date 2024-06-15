@@ -20,14 +20,11 @@ class Category(BaseModel):
         return self.category_name
     
 class Cast(BaseModel):
-    category = models.ForeignKey(Category, related_name="casts", on_delete=models.CASCADE)
+    #category = models.ForeignKey(Category, related_name="casts", on_delete=models.CASCADE)
     cast_name = models.CharField(max_length=255)    
 
     def __str__(self) -> str:
-        return self.cast_name
-
-    class Meta:
-        unique_together = ['category', 'cast_name']
+        return self.cast_name   
 
 
 class Month_Master(BaseModel):

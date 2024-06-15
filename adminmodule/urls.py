@@ -11,6 +11,7 @@ router.register('discounthead',DiscountHeadViewSet, basename='discounthead')
 router.register('finehead',FineheadViewSet, basename='finehead')
 router.register('academicyear',AcademicyearViewSet, basename='academicyear')
 router.register('fine',FineViewSet, basename='fine')
+router.register('fee-month-map',FeeMonthMappingView, basename='fee-month-map')
 
 urlpatterns = [
     path('month-mapping/', MonthMappingView.as_view(), name='month-mapping'),

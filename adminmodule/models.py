@@ -123,7 +123,14 @@ class FeeDate(BaseModel):
     pass
 
 class FeeMonthMap(BaseModel):
-    pass
+    academicYear = models.ForeignKey(Academicyear, on_delete=models.RESTRICT, related_name="fee_month_map_session", null=True)
+    branch = models.ForeignKey(Branch, related_name="fee_month_map_branch", on_delete=models.RESTRICT, null=True)
+    feeHead = models.ForeignKey(Feehead, on_delete=models.RESTRICT, related_name="fee_month_map_feehead",null=True)
+    monthMaster = models.ForeignKey(Month_Master, on_delete=models.RESTRICT, related_name="fee_month_map_month",null=True)
+
+    class Meta:
+        unique_together = ['academicYear', 'branch','feeHead','monthMaster']
+
 
 class FeeClassMap(BaseModel):
     grade = models.ForeignKey(Grade, on_delete=models.RESTRICT, related_name='fee_class_map_grades', null=True)    

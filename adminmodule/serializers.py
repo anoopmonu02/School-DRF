@@ -159,24 +159,45 @@ class FeeClassAmountMapSerializer(serializers.ModelSerializer):
         fields = ['id','feehead','head_name', 'amount']
 
 class FeeClassMapSerializer(serializers.ModelSerializer):
-    fee_class_amount_map = FeeClassAmountMapSerializer(many=True)  # Nested serializer for child model
+    fee_class_amount_map_fee_class = FeeClassAmountMapSerializer(many=True, required=False)  # Nested serializer for child model
 
     class Meta:
         model = FeeClassMap
-        fields = ['id','grade', 'academicYear', 'branch', 'fee_class_amount_map']
+        fields = ['id','grade', 'academicYear', 'branch', 'fee_class_amount_map_fee_class']
 
     def create(self, validated_data):
         user = self.context['request'].user
-        fee_class_amount_maps_data = validated_data.pop('fee_class_amount_map',[])  # Extract child data
-        fee_class_map = FeeClassMap.objects.create(**validated_data)  # Create parent object
-        
-        # Filter out records with amount 0
-        fee_class_amount_maps_data = [
-            fee_data for fee_data in fee_class_amount_maps_data if fee_data.get('amount', 0) != 0
-        ]
-        print("fee_class_amount_maps_data after ", fee_class_amount_maps_data)
-        for fee_class_amount_map_data in fee_class_amount_maps_data:
-            fee_class_amount_map_data['updated_by'] = user
-            FeeClassAmountMap.objects.create(feeClassMap=fee_class_map, **fee_class_amount_map_data)  # Create child objects
+        fee_class_amount_maps_data = validated_data.pop('fee_class_amount_map_fee_class',[])  # Extract child data
 
-        return fee_class_map
+        existing_instance = FeeClassMap.objects.filter(
+            grade=validated_data['grade'],
+            academicYear=validated_data['academicYear'],
+            branch=validated_data['branch']
+        ).first()
+        print("existing_instance ",existing_instance)
+        if existing_instance:
+            existing_instance.fee_class_amount_map_fee_class.all().delete()  # Delete all child objects
+            fee_class_amount_maps_data = [
+                fee_data for fee_data in fee_class_amount_maps_data if fee_data.get('amount', 0) != 0
+            ]
+            for fee_data in fee_class_amount_maps_data:
+                fee_data['updated_by'] = user
+                FeeClassAmountMap.objects.create(feeClassMap=existing_instance, **fee_data)  # Create child objects
+            return existing_instance
+        else:
+            fee_class_map = FeeClassMap.objects.create(**validated_data)  # Create parent object        
+            # Filter out records with amount 0
+            fee_class_amount_maps_data = [
+                fee_data for fee_data in fee_class_amount_maps_data if fee_data.get('amount', 0) != 0
+            ]
+            print("fee_class_amount_maps_data after ", fee_class_amount_maps_data)
+            for fee_class_amount_map_data in fee_class_amount_maps_data:
+                fee_class_amount_map_data['updated_by'] = user
+                FeeClassAmountMap.objects.create(feeClassMap=fee_class_map, **fee_class_amount_map_data)  # Create child objects
+
+            return fee_class_map
+        
+class FeeMonthMappingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FeeMonthMap
+        exclude = ['created_at','updated_at']   

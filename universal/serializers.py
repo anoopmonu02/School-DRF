@@ -69,10 +69,10 @@ class CategorySerializer(serializers.ModelSerializer):
         return data
 # Cast Serializer with Parent  - Category Serializer
 class CastSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(read_only=True)   
+    #category = CategorySerializer(read_only=True)   
     class Meta:
         model = Cast
-        fields = ['id', 'uuid', 'category', 'cast_name']
+        fields = ['id', 'uuid', 'cast_name']
         #exclude = ['created_at','updated_at','updated_by']         
     
 
